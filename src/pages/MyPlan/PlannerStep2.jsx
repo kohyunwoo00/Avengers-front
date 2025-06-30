@@ -55,7 +55,7 @@ const PlannerStep2 = ({
 
   // 구글 맵 초기화
   useEffect(() => {
-    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+    const apiKey = window.ENV.GOOGLE_MAPS_API_KEY;
     console.log("Google Maps API Key:", apiKey ? "설정완료" : "설정실패");
 
     const initMap = () => {

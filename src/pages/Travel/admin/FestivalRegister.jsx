@@ -1,35 +1,8 @@
 import { useState, useRef } from "react";
-import {
-  MapPin,
-  Clock,
-  Phone,
-  Mail,
-  Globe,
-  Upload,
-  X,
-  Plus,
-} from "lucide-react";
-import StepButton from "../../components/common/MyPlan/StepButton";
+import { Calendar, Upload, X, Plus, Phone, Mail, Globe } from "lucide-react";
+import StepButton from "../../../components/common/MyPlan/StepButton";
 
-function TravelRegister() {
-  const [operatingHours, setOperatingHours] = useState({
-    월: { isOpen: false, startTime: "09:00", endTime: "18:00" },
-    화: { isOpen: false, startTime: "09:00", endTime: "18:00" },
-    수: { isOpen: false, startTime: "09:00", endTime: "18:00" },
-    목: { isOpen: false, startTime: "09:00", endTime: "18:00" },
-    금: { isOpen: false, startTime: "09:00", endTime: "18:00" },
-    토: { isOpen: false, startTime: "09:00", endTime: "18:00" },
-    일: { isOpen: false, startTime: "09:00", endTime: "18:00" },
-  });
-
-  const facilityItems = [
-    { key: "limitedPeriod", label: "기간 한정 여부" },
-    { key: "parkingAvailable", label: "주차 가능 여부" },
-    { key: "reservationRequired", label: "예약 필요 여부" },
-    { key: "disabledFriendly", label: "장애인 편의 여부" },
-    { key: "restroomAvailable", label: "화장실 유무" },
-  ];
-
+function FestivalRegister() {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [userTags, setUserTags] = useState([]);
   const [newTag, setNewTag] = useState("");
@@ -42,59 +15,13 @@ function TravelRegister() {
     restroomAvailable: false,
   });
 
-  const days = ["월", "화", "수", "목", "금", "토", "일"];
-  const dayNames = {
-    월: "월요일",
-    화: "화요일",
-    수: "수요일",
-    목: "목요일",
-    금: "금요일",
-    토: "토요일",
-    일: "일요일",
-  };
-
-  const dayColors = {
-    월: "#FF6B6B", // Red
-    화: "#4ECDC4", // Teal
-    수: "#45B7D1", // Blue
-    목: "#96CEB4", // Green
-    금: "#FFEAA7", // Yellow
-    토: "#DDA0DD", // Plum
-    일: "#FFB347", // Orange
-  };
-
-  const toggleDay = (day) => {
-    setOperatingHours((prev) => ({
-      ...prev,
-      [day]: {
-        ...prev[day],
-        isOpen: !prev[day].isOpen,
-      },
-    }));
-  };
-
-  const toggleAllDays = () => {
-    const allOpen = days.every((day) => operatingHours[day].isOpen);
-    const newState = !allOpen;
-
-    setOperatingHours((prev) => {
-      const updated = { ...prev };
-      days.forEach((day) => {
-        updated[day] = { ...updated[day], isOpen: newState };
-      });
-      return updated;
-    });
-  };
-
-  const updateTime = (day, timeType, value) => {
-    setOperatingHours((prev) => ({
-      ...prev,
-      [day]: {
-        ...prev[day],
-        [timeType]: value,
-      },
-    }));
-  };
+  const facilityItems = [
+    { key: "limitedPeriod", label: "기간 한정 여부" },
+    { key: "parkingAvailable", label: "주차 가능 여부" },
+    { key: "reservationRequired", label: "예약 필요 여부" },
+    { key: "disabledFriendly", label: "장애인 편의 여부" },
+    { key: "restroomAvailable", label: "화장실 유무" },
+  ];
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files || []);
@@ -125,7 +52,7 @@ function TravelRegister() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted", { operatingHours, uploadedImages, userTags });
+    console.log("Festival form submitted", { uploadedImages, userTags });
   };
 
   return (
@@ -140,8 +67,8 @@ function TravelRegister() {
             }}
           >
             <h1 className="text-2xl font-bold flex items-center gap-2">
-              <MapPin className="h-6 w-6" />
-              여행지 등록
+              <Calendar className="h-6 w-6" />
+              축제 등록
             </h1>
           </div>
 
@@ -159,37 +86,36 @@ function TravelRegister() {
                 </div>
               </div>
               <div className="p-6 space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      여행지명 *
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      placeholder="여행지 이름을 입력하세요"
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="category"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      카테고리 *
-                    </label>
-                    <select
-                      id="category"
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="">카테고리를 선택하세요</option>
-                    </select>
-                  </div>
+                <div>
+                  <label
+                    htmlFor="festivalTitle"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    축제 제목 *
+                  </label>
+                  <input
+                    id="festivalTitle"
+                    type="text"
+                    placeholder="ex. 벚꽃 마축제"
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="festivalBasicInfo"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    축제 기본정보 *
+                  </label>
+                  <input
+                    id="festivalBasicInfo"
+                    type="text"
+                    placeholder="ex. 봄의 전령 축제를 합니다. 수십 만명이 오는 장소"
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
                 </div>
 
                 <div>
@@ -213,12 +139,12 @@ function TravelRegister() {
                     htmlFor="address"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    주소 *
+                    상세 주소 *
                   </label>
                   <input
                     id="address"
                     type="text"
-                    placeholder="상세 주소를 입력하세요"
+                    placeholder="축제가 열리는 상세 주소를 입력하세요"
                     required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -259,6 +185,35 @@ function TravelRegister() {
                   </div>
                 </div>
 
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="startDate"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      축제 시작일 *
+                    </label>
+                    <input
+                      id="startDate"
+                      type="date"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="endDate"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      축제 종료일 *
+                    </label>
+                    <input
+                      id="endDate"
+                      type="date"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label
@@ -277,31 +232,31 @@ function TravelRegister() {
                   </div>
                   <div>
                     <label
-                      htmlFor="email"
+                      htmlFor="homepage"
                       className="flex items-center gap-1 text-sm font-medium text-gray-700 mb-1"
                     >
-                      <Mail className="h-4 w-4" />
-                      이메일
+                      <Globe className="h-4 w-4" />
+                      홈페이지
                     </label>
                     <input
-                      id="email"
-                      type="email"
-                      placeholder="example@email.com"
+                      id="homepage"
+                      type="url"
+                      placeholder="https://example.com"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
                     <label
-                      htmlFor="website"
+                      htmlFor="sns"
                       className="flex items-center gap-1 text-sm font-medium text-gray-700 mb-1"
                     >
-                      <Globe className="h-4 w-4" />
-                      웹사이트
+                      <Mail className="h-4 w-4" />
+                      SNS 링크
                     </label>
                     <input
-                      id="website"
+                      id="sns"
                       type="url"
-                      placeholder="https://example.com"
+                      placeholder="https://instagram.com/festival"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
@@ -309,14 +264,14 @@ function TravelRegister() {
 
                 <div>
                   <label
-                    htmlFor="description"
+                    htmlFor="festivalDetailInfo"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    상세 설명
+                    축제 상세 정보
                   </label>
                   <textarea
-                    id="description"
-                    placeholder="여행지에 대한 상세한 설명을 입력하세요"
+                    id="festivalDetailInfo"
+                    placeholder="축제에서 진행 되는 프로그램이나 축제에 대한 자세한 정보를 입력 해주세요..."
                     rows={4}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -328,19 +283,19 @@ function TravelRegister() {
             <div className="bg-white rounded-lg shadow-sm">
               <div className="px-6 py-4">
                 <h3 className="text-lg font-semibold text-blue-400">
-                  이미지 업로드
+                  축제 이미지 업로드
                 </h3>
               </div>
               <div className="p-6 space-y-4">
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                   <Upload className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                   <p className="text-gray-600 mb-4">
-                    이미지를 드래그하거나 클릭하여 업로드하세요
+                    축제 이미지를 드래그하거나 클릭하여 업로드하세요
                   </p>
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-4 py-2 border border-blue-300 text-blue-400 rounded-md hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="px-4 py-2 border border-blue-300 text-blue-600 rounded-md hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     파일 선택
                   </button>
@@ -363,7 +318,7 @@ function TravelRegister() {
                             src={
                               URL.createObjectURL(file) || "/placeholder.svg"
                             }
-                            alt={`Upload ${index + 1}`}
+                            alt={`Festival ${index + 1}`}
                             className="w-full h-full object-cover rounded-lg"
                           />
                         </div>
@@ -381,133 +336,11 @@ function TravelRegister() {
               </div>
             </div>
 
-            {/* 운영 정보 */}
+            {/* 축제 태그 */}
             <div className="bg-white rounded-lg shadow-sm">
               <div className="px-6 py-4">
-                <h3 className="text-lg font-semibold text-blue-400 flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
-                  운영 정보
-                </h3>
-              </div>
-              <div className="p-6 space-y-6">
-                <div>
-                  <label className="block text-base font-medium text-gray-700 mb-3">
-                    운영 요일
-                  </label>
-                  <div className="space-y-3">
-                    <button
-                      type="button"
-                      onClick={toggleAllDays}
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{
-                        backgroundColor: days.every(
-                          (day) => operatingHours[day].isOpen
-                        )
-                          ? "#73B3DF"
-                          : "white",
-                        color: days.every((day) => operatingHours[day].isOpen)
-                          ? "white"
-                          : "#61A0D4",
-                        borderColor: "#73B3DF",
-                      }}
-                    >
-                      전체 운영 (
-                      {days.every((day) => operatingHours[day].isOpen)
-                        ? "해제"
-                        : "설정"}
-                      )
-                    </button>
-
-                    <div className="flex flex-wrap gap-2">
-                      {days.map((day) => (
-                        <button
-                          key={day}
-                          type="button"
-                          onClick={() => toggleDay(day)}
-                          className="min-w-[60px] px-3 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style={{
-                            backgroundColor: operatingHours[day].isOpen
-                              ? dayColors[day]
-                              : "white",
-                            color: operatingHours[day].isOpen
-                              ? "white"
-                              : "#374151",
-                            border: operatingHours[day].isOpen
-                              ? `1px solid ${dayColors[day]}`
-                              : "1px solid #d1d5db",
-                          }}
-                        >
-                          {day}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <label className="block text-base font-medium text-gray-700">
-                    운영 시간
-                  </label>
-                  {days.map((day) => (
-                    <div
-                      key={day}
-                      className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
-                    >
-                      <div
-                        className="flex items-center justify-center w-8 h-8 rounded-full text-white text-sm font-medium"
-                        style={{
-                          backgroundColor: operatingHours[day].isOpen
-                            ? dayColors[day]
-                            : "#D1D5DB",
-                        }}
-                      >
-                        {day}
-                      </div>
-
-                      <div className="w-16 text-sm font-medium text-gray-700">
-                        {dayNames[day]}
-                      </div>
-
-                      {operatingHours[day].isOpen ? (
-                        <div className="flex items-center gap-2 flex-1">
-                          <input
-                            type="time"
-                            value={operatingHours[day].startTime}
-                            onChange={(e) =>
-                              updateTime(day, "startTime", e.target.value)
-                            }
-                            className="w-34px px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                          <span className="text-gray-500">~</span>
-                          <input
-                            type="time"
-                            value={operatingHours[day].endTime}
-                            onChange={(e) =>
-                              updateTime(day, "endTime", e.target.value)
-                            }
-                            className="w-34 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                          <span className="text-xs text-blue-500 ml-2">
-                            운영시간({operatingHours[day].startTime} ~{" "}
-                            {operatingHours[day].endTime})
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex-1 text-gray-400 text-sm">
-                          휴무일({day}요일은 운영하지 않습니다)
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* 사용자 태그 */}
-            <div className="bg-white rounded-lg shadow-sm">
-              <div className="px-6 py-4 rounded-lg">
                 <h3 className="text-lg font-semibold text-blue-400">
-                  사용자 태그
+                  축제 태그
                 </h3>
               </div>
               <div className="p-6 space-y-4">
@@ -516,7 +349,7 @@ function TravelRegister() {
                     type="text"
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}
-                    placeholder="태그를 입력하세요"
+                    placeholder="축제 관련 태그를 입력하세요"
                     onKeyPress={(e) =>
                       e.key === "Enter" && (e.preventDefault(), addTag())
                     }
@@ -525,7 +358,7 @@ function TravelRegister() {
                   <button
                     type="button"
                     onClick={addTag}
-                    className="px-3 py-2 bg-blue-400 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <Plus className="h-4 w-4" />
                   </button>
@@ -603,4 +436,4 @@ function TravelRegister() {
   );
 }
 
-export default TravelRegister;
+export default FestivalRegister;

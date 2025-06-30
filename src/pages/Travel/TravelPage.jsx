@@ -13,8 +13,10 @@ import {
   X,
   ChevronDown,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function TravelPage() {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [favorites, setFavorites] = useState(new Set());
   const [selectedCategory, setSelectedCategory] = useState("전체");
@@ -36,39 +38,6 @@ function TravelPage() {
       participants: "50만명",
       tags: ["봄", "벚꽃", "가족"],
     },
-    {
-      id: 2,
-      title: "한강 불꽃축제",
-      location: "반포 한강공원",
-      district: "서초구",
-      image: "/placeholder.svg?height=200&width=300",
-      period: "10월 7일",
-      rating: 4.9,
-      participants: "100만명",
-      tags: ["가을", "불꽃", "야경"],
-    },
-    {
-      id: 3,
-      title: "서울 등축제",
-      location: "청계천",
-      district: "중구",
-      image: "/placeholder.svg?height=200&width=300",
-      period: "11월 1일 ~ 11월 30일",
-      rating: 4.7,
-      participants: "80만명",
-      tags: ["겨울", "등불", "야경"],
-    },
-    {
-      id: 4,
-      title: "서울 빛초롱축제",
-      location: "동대문디자인플라자",
-      district: "중구",
-      image: "/placeholder.svg?height=200&width=300",
-      period: "12월 15일 ~ 1월 15일",
-      rating: 4.6,
-      participants: "60만명",
-      tags: ["겨울", "조명", "디자인"],
-    },
   ];
 
   // 여행지 리스트 데이터
@@ -85,97 +54,6 @@ function TravelPage() {
       tags: ["역사", "궁궐", "전통"],
       facilities: ["주차가능", "장애인편의"],
       price: "무료",
-    },
-    {
-      id: 2,
-      title: "명동 교자",
-      category: "맛집",
-      location: "중구 명동길 29",
-      district: "중구",
-      image: "/placeholder.svg?height=200&width=300",
-      rating: 4.3,
-      reviews: 856,
-      tags: ["만두", "전통", "맛집"],
-      facilities: ["예약필요"],
-      price: "15,000원~",
-    },
-    {
-      id: 3,
-      title: "롯데월드타워",
-      category: "관광지",
-      location: "송파구 올림픽로 300",
-      district: "송파구",
-      image: "/placeholder.svg?height=200&width=300",
-      rating: 4.4,
-      reviews: 2341,
-      tags: ["전망", "쇼핑", "현대"],
-      facilities: ["주차가능", "장애인편의", "화장실"],
-      price: "27,000원",
-    },
-    {
-      id: 4,
-      title: "홍대 놀이터",
-      category: "액티비티",
-      location: "마포구 와우산로 94",
-      district: "마포구",
-      image: "/placeholder.svg?height=200&width=300",
-      rating: 4.2,
-      reviews: 567,
-      tags: ["클럽", "젊음", "밤문화"],
-      facilities: ["화장실"],
-      price: "입장료 별도",
-    },
-    {
-      id: 5,
-      title: "북촌 한옥마을",
-      category: "관광지",
-      location: "종로구 계동길 37",
-      district: "종로구",
-      image: "/placeholder.svg?height=200&width=300",
-      rating: 4.6,
-      reviews: 1876,
-      tags: ["한옥", "전통", "사진"],
-      facilities: ["화장실"],
-      price: "무료",
-    },
-    {
-      id: 6,
-      title: "이태원 맛집거리",
-      category: "맛집",
-      location: "용산구 이태원로 200",
-      district: "용산구",
-      image: "/placeholder.svg?height=200&width=300",
-      rating: 4.1,
-      reviews: 432,
-      tags: ["세계음식", "다양성", "이국적"],
-      facilities: ["주차가능", "화장실"],
-      price: "20,000원~",
-    },
-    {
-      id: 7,
-      title: "강남 스파",
-      category: "숙박",
-      location: "강남구 테헤란로 152",
-      district: "강남구",
-      image: "/placeholder.svg?height=200&width=300",
-      rating: 4.7,
-      reviews: 234,
-      tags: ["휴식", "스파", "럭셔리"],
-      facilities: ["주차가능", "장애인편의", "화장실", "예약필요"],
-      price: "150,000원~",
-    },
-    {
-      id: 8,
-      title: "동대문 쇼핑",
-      category: "쇼핑",
-      location: "중구 을지로 281",
-      district: "중구",
-      image: "/placeholder.svg?height=200&width=300",
-      rating: 4.0,
-      reviews: 678,
-      tags: ["쇼핑", "패션", "24시간"],
-      facilities: ["주차가능", "화장실"],
-      price: "상품별 상이",
     },
   ];
 
@@ -459,7 +337,12 @@ function TravelPage() {
                     )}
                   </div>
 
-                  <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium">
+                  <button
+                    onClick={() =>
+                      navigate(`/travels/detail/${destination.id}`)
+                    }
+                    className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+                  >
                     상세보기
                   </button>
                 </div>
@@ -491,7 +374,10 @@ function TravelPage() {
           {/* 더보기 버튼 */}
           {filteredDestinations.length > 0 && (
             <div className="text-center">
-              <button className="bg-blue-600 text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium">
+              <button
+                onClick={() => navigate(`/travels/search`)}
+                className="bg-blue-600 text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium"
+              >
                 더보기
               </button>
             </div>

@@ -1,5 +1,5 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./components/Context/AuthContext";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import PrivacyPolicy from "./components/Footer/PrivacyPolicy";
@@ -9,17 +9,17 @@ import CustomerCenter from "./components/Footer/CustomerCenter";
 import StepIndicator from "./components/common/MyPlan/Step";
 import SignUp from "./components/Auth/SignUp";
 import Login from "./components/Auth/Login";
-import TravelRegister from "./pages/Travel/TravelRegister";
-import FestivalRegister from "./pages/Travel/FestivalRegister";
-import TravelOptionsManagement from "./pages/Travel/TravelOptionManagement";
+import TravelOptionsManagement from "./pages/Travel/admin/TravelOptionManagement";
+import TravelAdminManagement from "./pages/Travel/admin/TravelAdminManagement";
+import TravelRegister from "./pages/Travel/admin/TravelRegister";
+import FestivalRegister from "./pages/Travel/admin/FestivalRegister";
 import TravelPage from "./pages/Travel/TravelPage";
-import TravelDetailSearchPage from "./pages/Travel/TravelDetailSearch";
 import FestivalPage from "./pages/Travel/FestivalPage";
 import TravelDetailPage from "./pages/Travel/TravelDetail";
-import TravelAdminManagement from "./pages/Travel/TravelAdminManagement";
+import TravelDetailSearchPage from "./pages/Travel/TravelDetailSearch";
 import MyTravelPlanDetail from "./pages/MyPlan/MyTravelPlanDetail";
+import MyTravelPlanList from "./pages/MyPlan/MyTravelPlanList";
 import FindId from "./components/Auth/FindId";
-import { AuthProvider } from "./components/Context/AuthContext";
 import FindIdResult from "./components/Auth/FindIdResult";
 import FindPassword from "./components/Auth/FindPassword";
 import NewPassword from "./components/Auth/NewPassword";
@@ -34,18 +34,6 @@ function App() {
     <AuthProvider>
       <div className="min-h-screen bg-gray-50">
         <Header />
-
-      <main className="max-w-[1440px] mx-auto px-6 py-8">
-        <Routes>
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route
-            path="/email-collection-policy"
-            element={<EmailCollectionPolicy />}
-          />
-          <Route path="/terms-of-service" element={<TermsOfService />} />
-          <Route path="/customer-service" element={<CustomerCenter />} />
-          <Route path="/myplan" element={<StepIndicator />} />
-          
         <main className="max-w-[1440px] mx-auto px-6 py-8">
           <Routes>
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -80,6 +68,7 @@ function App() {
             />
             <Route path="/travels/detail" element={<TravelDetailPage />} />
             <Route path="/festivals" element={<FestivalPage />} />
+
             {/* 여행지 관련 관리자 기능 */}
             <Route path="/admin/travels" element={<TravelRegister />} />
             <Route path="/admin/festivals" element={<FestivalRegister />} />
@@ -91,8 +80,8 @@ function App() {
               path="/admin/travels/options/management"
               element={<TravelOptionsManagement />}
             />
-                               
-          {/* 나의 여행 플랜 */}
+
+            {/* 나의 여행 플랜 */}
             <Route path="/myplan" element={<StepIndicator />} />
             <Route path="/myplan/list" element={<MyTravelPlanList />} />
             <Route path="/myplan/detail" element={<MyTravelPlanDetail />} />

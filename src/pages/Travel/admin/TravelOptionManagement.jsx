@@ -20,58 +20,33 @@ import { useEffect } from "react";
 
 export default function TravelOptionsManagement() {
   const API_URL = window.ENV.API_URL;
+  const token = JSON.parse(localStorage.getItem("tokens"))?.accessToken;
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
 
   useEffect(() => {
     fetchCities(); // 초기 로드 시 시/도 데이터 조회
+    fetchDistricts(); // 구/군도 같이 로딩
+    fetchCategories(); // 카테고리 데이터 조회
+    fetchTags();
+    fetchThemas();
+    fetchOptions();
   }, []);
 
+  // 카테고리 데이터 (TB_TRAVEL_CATEGORY)
+  const [categories, setCategories] = useState([]);
   // 시 데이터 (TB_CITY)
   const [cities, setCities] = useState([]);
-
-  // 카테고리 데이터 (TB_TRAVEL_CATEGORY)
-  const [categories, setCategories] = useState([
-    {
-      id: 4,
-      name: "액티비티",
-      status: "ACTIVE",
-      createdDate: "2024-01-01",
-      modifiedDate: "2024-01-01",
-    },
-  ]);
-
   // 구 데이터 (TB_GU)
-  const [districts, setDistricts] = useState([
-    {
-      id: 1,
-      name: "강남구",
-      cityNo: 1,
-      status: "ACTIVE",
-      createdDate: "2024-01-01",
-      modifiedDate: "2024-01-01",
-    },
-  ]);
-
+  const [districts, setDistricts] = useState([]);
   // 여행지 태그 데이터 (TB_TRAVEL_TAG)
-  const [travelTags, setTravelTags] = useState([
-    {
-      id: 1,
-      name: "가족여행",
-      createdDate: "2024-01-01",
-      modifiedDate: "2024-01-01",
-    },
-  ]);
-
+  const [travelTags, setTravelTags] = useState([]);
+  // 여행지 테마 데이터 (TB_TRAVEL_THEMAS)
+  const [travelThemas, setTravelThemas] = useState([]);
   // 여행지 옵션 데이터 (TB_TRAVEL_OPTION)
-  const [travelOptions, setTravelOptions] = useState([
-    {
-      id: 1,
-      name: "주차 가능",
-      detail: "주차장 이용 가능",
-      status: "ACTIVE",
-      createdDate: "2024-01-01",
-      modifiedDate: "2024-01-01",
-    },
-  ]);
+  const [travelOptions, setTravelOptions] = useState([]);
 
   // UI 상태
   const [activeTab, setActiveTab] = useState("categories");
@@ -129,10 +104,17 @@ export default function TravelOptionsManagement() {
     },
     {
       key: "travelOptions",
-      label: "여행지 옵션",
+      label: "여행지 편의시설",
       icon: Database,
       data: travelOptions,
       setter: setTravelOptions,
+    },
+    {
+      key: "travelThemas",
+      label: "여행지 테마",
+      icon: Settings,
+      data: travelThemas,
+      setter: setTravelThemas,
     },
   ];
 
@@ -143,11 +125,7 @@ export default function TravelOptionsManagement() {
   // 시/도 목록 조회 (중복된 함수 제거)
   const fetchCities = () => {
     axios
-      .get(`${API_URL}/api/admin/travels/city`, {
-        headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMjEiLCJpYXQiOjE3NTA5MjM4OTksImV4cCI6MTc1MTE4MzA5OX0.YvvcDWBW-r9098a4iBs8y2eWxFcGoHYFkltyiG3epfU`,
-        },
-      })
+      .get(`${API_URL}/api/admin/travels/city`, { headers })
       .then((res) => {
         const cityList = res.data.data.map((city) => ({
           id: city.cityNo,
@@ -175,11 +153,7 @@ export default function TravelOptionsManagement() {
           cityMapX: formData.mapX || "",
           cityMapY: formData.mapY || "",
         },
-        {
-          headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMjEiLCJpYXQiOjE3NTA5MjM4OTksImV4cCI6MTc1MTE4MzA5OX0.YvvcDWBW-r9098a4iBs8y2eWxFcGoHYFkltyiG3epfU`,
-          },
-        }
+        { headers }
       )
       .then((res) => {
         const newCity = res.data.data;
@@ -213,11 +187,7 @@ export default function TravelOptionsManagement() {
           cityMapY: formData.mapY || "",
           cityStatus: formData.status === "ACTIVE" ? "Y" : "N",
         },
-        {
-          headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMjEiLCJpYXQiOjE3NTA5MjM4OTksImV4cCI6MTc1MTE4MzA5OX0.YvvcDWBW-r9098a4iBs8y2eWxFcGoHYFkltyiG3epfU`,
-          },
-        }
+        { headers }
       )
       .then((res) => {
         console.log("수정 성공:", res.data);
@@ -232,11 +202,7 @@ export default function TravelOptionsManagement() {
 
   const deleteCity = (id) => {
     axios
-      .delete(`${API_URL}/api/admin/travels/city/${id}`, {
-        headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMjEiLCJpYXQiOjE3NTA5MjM4OTksImV4cCI6MTc1MTE4MzA5OX0.YvvcDWBW-r9098a4iBs8y2eWxFcGoHYFkltyiG3epfU`,
-        },
-      })
+      .delete(`${API_URL}/api/admin/travels/city/${id}`, { headers })
       .then((res) => {
         console.log("삭제 성공:", res.data);
         fetchCities(); // 목록 재조회
@@ -245,6 +211,402 @@ export default function TravelOptionsManagement() {
       .catch((err) => {
         console.error("삭제 실패:", err);
         alert("삭제 실패");
+      });
+  };
+
+  // 구/군 탭에서만 활성화
+  // 구/군 목록 조회 (중복된 함수 제거)
+  const fetchDistricts = () => {
+    axios
+      .get(`${API_URL}/api/admin/travels/gu`, { headers })
+      .then((res) => {
+        const guList = res.data.data.map((gu) => ({
+          id: gu.guNo,
+          name: gu.guName,
+          cityNo: gu.cityNo,
+          status: gu.guStatus === "Y" ? "ACTIVE" : "INACTIVE",
+          mapX: gu.guMapX || "",
+          mapY: gu.guMapY || "",
+          createdDate: gu.guCreatedDate,
+          modifiedDate: gu.guModifiedDate,
+        }));
+        console.log("구/군 목록 조회 성공:", res.data);
+        setDistricts(guList);
+      })
+      .catch((err) => {
+        console.error("구/군 목록 조회 실패:", err);
+      });
+  };
+
+  const createDistrict = () => {
+    return axios
+      .post(
+        `${API_URL}/api/admin/travels/gu`,
+        {
+          guName: formData.name,
+          cityNo: formData.cityNo || 1,
+          guMapX: formData.mapX || "",
+          guMapY: formData.mapY || "",
+          guStatus: formData.status === "ACTIVE" ? "Y" : "N",
+        },
+        { headers }
+      )
+      .then((res) => {
+        const newGu = res.data.data;
+        const now = new Date().toISOString().split("T")[0];
+        const newItem = {
+          id: newGu.guNo,
+          name: newGu.guName,
+          cityNo: newGu.cityNo || 1,
+          mapX: newGu.guMapX || "",
+          mapY: newGu.guMapY || "",
+          status: newGu.guStatus === "Y" ? "ACTIVE" : "INACTIVE",
+          createdDate: newGu.guCreatedDate || now,
+          modifiedDate: newGu.guModifiedDate || now,
+        };
+        console.log("구/군 추가 성공:", res.data);
+        setDistricts((prev) => [...prev, newItem]);
+        closeModal();
+      })
+      .catch((err) => {
+        console.error("구/군 추가 실패:", err);
+        alert("구/군 등록에 실패했습니다.");
+      });
+  };
+
+  const updateDistrict = () => {
+    axios
+      .put(
+        `${API_URL}/api/admin/travels/gu/${editingItem.id}`,
+        {
+          cityNo: formData.cityNo || editingItem.cityNo,
+          guName: formData.name,
+          guMapX: formData.mapX || "",
+          guMapY: formData.mapY || "",
+          guStatus: formData.status === "ACTIVE" ? "Y" : "N",
+        },
+        { headers }
+      )
+      .then((res) => {
+        console.log("수정 성공:", res.data);
+        fetchDistricts(); // 목록 다시 불러오기
+        closeModal();
+      })
+      .catch((err) => {
+        console.error("수정 실패:", err);
+        alert("수정 실패");
+      });
+  };
+
+  const deleteDistrict = (id) => {
+    axios
+      .delete(`${API_URL}/api/admin/travels/gu/${id}`, { headers })
+      .then((res) => {
+        console.log("삭제 성공:", res.data);
+        fetchDistricts(); // 목록 재조회
+        setDeleteConfirm(null);
+      })
+      .catch((err) => {
+        console.error("삭제 실패:", err);
+        alert("삭제 실패");
+      });
+  };
+
+  const fetchCategories = () => {
+    axios
+      .get(`${API_URL}/api/admin/travels/category`, { headers })
+      .then((res) => {
+        const categoryList = res.data.data.map((cat) => ({
+          id: cat.categoryNo,
+          name: cat.categoryName,
+          status: cat.categoryStatus === "Y" ? "ACTIVE" : "INACTIVE",
+          createdDate: cat.categoryCreatedDate,
+          modifiedDate: cat.categoryModifiedDate,
+        }));
+        console.log("카테고리 목록 조회 성공:", res.data);
+        setCategories(categoryList);
+      })
+      .catch((err) => {
+        console.error("카테고리 목록 조회 실패:", err);
+      });
+  };
+
+  const createCategory = () => {
+    axios
+      .post(
+        `${API_URL}/api/admin/travels/category`,
+        { categoryName: formData.name },
+        { headers }
+      )
+      .then((res) => {
+        console.log("카테고리 등록 성공:", res.data);
+        fetchCategories();
+        closeModal();
+      })
+      .catch((err) => {
+        console.error("카테고리 등록 실패:", err);
+        alert("카테고리 등록 실패");
+      });
+  };
+
+  const updateCategory = () => {
+    axios
+      .put(
+        `${API_URL}/api/admin/travels/category/${editingItem.id}`,
+        {
+          categoryName: formData.name,
+          categoryStatus: formData.status === "ACTIVE" ? "Y" : "N",
+        },
+        { headers }
+      )
+      .then((res) => {
+        console.log("카테고리 수정 성공:", res.data);
+        fetchCategories();
+        closeModal();
+      })
+      .catch((err) => {
+        console.error("카테고리 수정 실패:", err);
+        alert("카테고리 수정 실패");
+      });
+  };
+
+  const deleteCategory = (id) => {
+    axios
+      .delete(`${API_URL}/api/admin/travels/category`, {
+        headers,
+        data: [id], // 삭제할 카테고리 ID 배열
+      })
+      .then((res) => {
+        console.log("카테고리 삭제 성공:", res.data);
+        fetchCategories();
+        setDeleteConfirm(null);
+      })
+      .catch((err) => {
+        console.error("카테고리 삭제 실패:", err);
+        alert("카테고리 삭제 실패");
+      });
+  };
+
+  const fetchTags = () => {
+    axios
+      .get(`${API_URL}/api/admin/travels/tag`, { headers })
+      .then((res) => {
+        const tagList = res.data.data.map((tag) => ({
+          id: tag.tagNo,
+          name: tag.tagName,
+          createdDate: tag.tagCreatedDate,
+          modifiedDate: tag.tagModifiedDate,
+        }));
+        console.log("태그 목록 조회 성공:", res.data);
+        setTravelTags(tagList);
+      })
+      .catch((err) => {
+        console.error("태그 목록 조회 실패:", err);
+      });
+  };
+
+  const createTag = () => {
+    const tagName = formData.name.startsWith("#")
+      ? formData.name
+      : `#${formData.name}`;
+    axios
+      .post(`${API_URL}/api/admin/travels/tag`, { tagName }, { headers })
+      .then((res) => {
+        console.log("태그 등록 성공:", res.data);
+        fetchTags();
+        closeModal();
+      })
+      .catch((err) => {
+        console.error("태그 등록 실패:", err);
+        alert("태그 등록 실패");
+      });
+  };
+
+  const updateTag = () => {
+    const tagName = formData.name.startsWith("#")
+      ? formData.name
+      : `#${formData.name}`;
+    axios
+      .put(
+        `${API_URL}/api/admin/travels/tag/${editingItem.id}`,
+        { tagName },
+        { headers }
+      )
+      .then((res) => {
+        console.log("태그 수정 성공:", res.data);
+        fetchTags();
+        closeModal();
+      })
+      .catch((err) => {
+        console.error("태그 수정 실패:", err);
+        alert("태그 수정 실패");
+      });
+  };
+
+  const deleteTag = (id) => {
+    axios
+      .delete(`${API_URL}/api/admin/travels/tag`, {
+        headers,
+        data: [id],
+      })
+      .then((res) => {
+        console.log("태그 삭제 성공:", res.data);
+        fetchTags();
+        setDeleteConfirm(null);
+      })
+      .catch((err) => {
+        console.error("태그 삭제 실패:", err);
+        alert("태그 삭제 실패");
+      });
+  };
+
+  const fetchThemas = () => {
+    axios
+      .get(`${API_URL}/api/admin/travels/thema`, { headers })
+      .then((res) => {
+        const themaList = res.data.data.map((thema) => ({
+          id: thema.themaNo,
+          name: thema.themaName,
+          status: thema.themaStatus === "Y" ? "ACTIVE" : "INACTIVE",
+          createdDate: thema.themaCreatedDate,
+          modifiedDate: thema.themaModifiedDate,
+        }));
+        console.log("테마 목록 조회 성공:", res.data);
+        setTravelThemas(themaList);
+      })
+      .catch((err) => {
+        console.error("테마 목록 조회 실패:", err);
+      });
+  };
+
+  const createThema = () => {
+    axios
+      .post(
+        `${API_URL}/api/admin/travels/thema`,
+        { themaName: formData.name },
+        { headers }
+      )
+      .then((res) => {
+        console.log("테마 등록 성공:", res.data);
+        fetchThemas();
+        closeModal();
+      })
+      .catch((err) => {
+        console.error("테마 등록 실패:", err);
+        alert("테마 등록 실패");
+      });
+  };
+
+  const updateThema = () => {
+    axios
+      .put(
+        `${API_URL}/api/admin/travels/thema/${editingItem.id}`,
+        {
+          themaName: formData.name,
+          themaStatus: formData.status === "ACTIVE" ? "Y" : "N",
+        },
+        { headers }
+      )
+      .then((res) => {
+        console.log("테마 수정 성공:", res.data);
+        fetchThemas();
+        closeModal();
+      })
+      .catch((err) => {
+        console.error("테마 수정 실패:", err);
+        alert("테마 수정 실패");
+      });
+  };
+
+  const deleteThema = (id) => {
+    axios
+      .delete(`${API_URL}/api/admin/travels/thema`, {
+        headers,
+        data: [id],
+      })
+      .then((res) => {
+        console.log("테마 삭제 성공:", res.data);
+        fetchThemas();
+        setDeleteConfirm(null);
+      })
+      .catch((err) => {
+        console.error("테마 삭제 실패:", err);
+        alert("테마 삭제 실패");
+      });
+  };
+
+  const fetchOptions = () => {
+    axios
+      .get(`${API_URL}/api/admin/travels/option`, { headers })
+      .then((res) => {
+        const optionList = res.data.data.map((opt) => ({
+          id: opt.optionNo,
+          name: opt.optionName,
+          status: opt.optionStatus === "Y" ? "ACTIVE" : "INACTIVE",
+          createdDate: opt.optionCreatedDate,
+          modifiedDate: opt.optionModifiedDate,
+        }));
+        console.log("옵션 목록 조회 성공:", res.data);
+        setTravelOptions(optionList);
+      })
+      .catch((err) => {
+        console.error("옵션 목록 조회 실패:", err);
+      });
+  };
+
+  const createOption = () => {
+    axios
+      .post(
+        `${API_URL}/api/admin/travels/option`,
+        { optionName: formData.name },
+        { headers }
+      )
+      .then((res) => {
+        console.log("옵션 등록 성공:", res.data);
+        fetchOptions();
+        closeModal();
+      })
+      .catch((err) => {
+        console.error("옵션 등록 실패:", err);
+        alert("옵션 등록 실패");
+      });
+  };
+
+  const updateOption = () => {
+    axios
+      .put(
+        `${API_URL}/api/admin/travels/option/${editingItem.id}`,
+        {
+          optionName: formData.name,
+          optionStatus: formData.status === "ACTIVE" ? "Y" : "N",
+        },
+        { headers }
+      )
+      .then((res) => {
+        console.log("옵션 수정 성공:", res.data);
+        fetchOptions();
+        closeModal();
+      })
+      .catch((err) => {
+        console.error("옵션 수정 실패:", err);
+        alert("옵션 수정 실패");
+      });
+  };
+
+  const deleteOption = (id) => {
+    axios
+      .delete(`${API_URL}/api/admin/travels/option`, {
+        headers,
+        data: [id],
+      })
+      .then((res) => {
+        console.log("옵션 삭제 성공:", res.data);
+        fetchOptions();
+        setDeleteConfirm(null);
+      })
+      .catch((err) => {
+        console.error("옵션 삭제 실패:", err);
+        alert("옵션 삭제 실패");
       });
   };
 
@@ -348,23 +710,66 @@ export default function TravelOptionsManagement() {
         createCity();
         return;
       }
+      if (activeTab === "districts") {
+        createDistrict();
+        return;
+      }
+      if (activeTab === "categories") {
+        createCategory();
+        return;
+      }
+      if (activeTab === "travelTags") {
+        createTag();
+        return;
+      }
+      if (activeTab === "travelThemas") {
+        createThema();
+        return;
+      }
+      if (activeTab === "travelOptions") {
+        createOption();
+        return;
+      }
       const newItem = {
         id: Math.max(...currentData.map((item) => item.id), 0) + 1,
         name: formData.name,
-        ...(activeTab === "travelOptions" && { detail: formData.detail }),
         ...(activeTab === "districts" && {
           cityNo: Number.parseInt(formData.cityNo) || 1,
         }),
-        ...(["categories", "cities", "districts", "travelOptions"].includes(
-          activeTab
-        ) && { status: formData.status }),
+        ...([
+          "categories",
+          "cities",
+          "districts",
+          "travelOptions",
+          "travelThemas",
+        ].includes(activeTab) && { status: formData.status }),
         createdDate: now,
         modifiedDate: now,
       };
       currentSetter([...currentData, newItem]);
     } else {
       if (activeTab === "cities") {
-        updateCity(); // ✅ 수정 API 호출
+        updateCity(); // 수정 API 호출
+        return;
+      }
+      if (activeTab === "districts") {
+        updateDistrict(); // 수정 API 호출
+        return;
+      }
+      if (activeTab === "categories") {
+        updateCategory(); // 수정 API 호출
+        return;
+      }
+      if (activeTab === "travelTags") {
+        updateTag();
+        return;
+      }
+      if (activeTab === "travelThemas") {
+        updateThema();
+        return;
+      }
+      if (activeTab === "travelOptions") {
+        updateOption();
         return;
       }
       currentSetter(
@@ -373,9 +778,6 @@ export default function TravelOptionsManagement() {
             ? {
                 ...item,
                 name: formData.name,
-                ...(activeTab === "travelOptions" && {
-                  detail: formData.detail,
-                }),
                 ...(activeTab === "districts" && {
                   cityNo: Number.parseInt(formData.cityNo) || item.cityNo,
                 }),
@@ -384,6 +786,7 @@ export default function TravelOptionsManagement() {
                   "cities",
                   "districts",
                   "travelOptions",
+                  "travelThemas",
                 ].includes(activeTab) && {
                   status: formData.status,
                 }),
@@ -401,6 +804,21 @@ export default function TravelOptionsManagement() {
   const handleDelete = (id) => {
     if (activeTab === "cities") {
       deleteCity(id);
+    }
+    if (activeTab === "districts") {
+      deleteDistrict(id);
+    }
+    if (activeTab === "categories") {
+      deleteCategory(id);
+    }
+    if (activeTab === "travelTags") {
+      deleteTag(id);
+    }
+    if (activeTab === "travelThemas") {
+      deleteThema(id);
+    }
+    if (activeTab === "travelOptions") {
+      deleteOption(id);
     } else {
       currentSetter(currentData.filter((item) => item.id !== id));
       setDeleteConfirm(null);
@@ -528,6 +946,7 @@ export default function TravelOptionsManagement() {
                           "cities",
                           "districts",
                           "travelOptions",
+                          "travelThemas",
                         ].includes(activeTab) && (
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -579,7 +998,7 @@ export default function TravelOptionsManagement() {
                         {/* 날짜 필터 */}
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
-                            생성일
+                            생성시간
                           </label>
                           <select
                             value={filters.dateRange}
@@ -650,7 +1069,7 @@ export default function TravelOptionsManagement() {
                 )}
                 {filters.dateRange !== "ALL" && (
                   <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-md">
-                    생성일:{" "}
+                    생성시간:{" "}
                     {filters.dateRange === "TODAY"
                       ? "오늘"
                       : filters.dateRange === "WEEK"
@@ -683,11 +1102,6 @@ export default function TravelOptionsManagement() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         이름
                       </th>
-                      {activeTab === "travelOptions" && (
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          상세
-                        </th>
-                      )}
                       {activeTab === "districts" && (
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           시/도
@@ -708,16 +1122,17 @@ export default function TravelOptionsManagement() {
                         "cities",
                         "districts",
                         "travelOptions",
+                        "travelThemas",
                       ].includes(activeTab) && (
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           상태
                         </th>
                       )}
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        생성일
+                        생성시간
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        수정일
+                        수정시간
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         작업
@@ -733,11 +1148,6 @@ export default function TravelOptionsManagement() {
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                           {item.name}
                         </td>
-                        {activeTab === "travelOptions" && (
-                          <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
-                            {item.detail}
-                          </td>
-                        )}
                         {activeTab === "districts" && (
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {cities.find((city) => city.id === item.cityNo)
@@ -759,6 +1169,7 @@ export default function TravelOptionsManagement() {
                           "cities",
                           "districts",
                           "travelOptions",
+                          "travelThemas",
                         ].includes(activeTab) && (
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span
@@ -848,23 +1259,6 @@ export default function TravelOptionsManagement() {
                   />
                 </div>
 
-                {activeTab === "travelOptions" && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      상세 설명
-                    </label>
-                    <textarea
-                      value={formData.detail}
-                      onChange={(e) =>
-                        setFormData({ ...formData, detail: e.target.value })
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      rows={3}
-                      placeholder="상세 설명을 입력하세요"
-                    />
-                  </div>
-                )}
-
                 {activeTab === "districts" && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -877,7 +1271,7 @@ export default function TravelOptionsManagement() {
                       }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      <option value="">시/도를 선택하세요</option>
+                      <option value="1">시/도를 선택하세요</option>
                       {cities.map((city) => (
                         <option key={city.id} value={city.id}>
                           {city.name}
@@ -924,6 +1318,7 @@ export default function TravelOptionsManagement() {
                   "cities",
                   "districts",
                   "travelOptions",
+                  "travelThemas",
                 ].includes(activeTab) && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">

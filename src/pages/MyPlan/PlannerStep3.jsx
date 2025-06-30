@@ -230,7 +230,7 @@ const PlannerStep3 = ({
 
   // 구글맵 초기화
   useEffect(() => {
-    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+    const apiKey = window.ENV.GOOGLE_MAPS_API_KEY;
 
     const initMap = () => {
       if (window.google && window.google.maps && mapRef.current) {

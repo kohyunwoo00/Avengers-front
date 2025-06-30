@@ -9,8 +9,10 @@ import {
   Globe,
   Star,
 } from "lucide-react";
+import { useParams } from "react-router-dom";
 
 function TravelDetailPage() {
+  const { id } = useParams();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
