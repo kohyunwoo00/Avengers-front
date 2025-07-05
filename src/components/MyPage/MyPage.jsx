@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 import ChangeNameModal from "./ChangeNameModal"; // 모달 컴포넌트 import
+import MyTravelPlanList from "../../pages/MyPlan/MyTravelPlanList";
 
 const MyPage = () => {
   const { auth } = useContext(AuthContext);
@@ -30,7 +31,7 @@ const MyPage = () => {
     {
       src: "/나의여행계획조회.png",
       text: "나의 여행 계획 조회",
-      path: "/mypage/trips",
+      path: "/myplan/list",
     },
     {
       src: "/나의리뷰조회.png",

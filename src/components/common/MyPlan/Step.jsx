@@ -277,6 +277,7 @@ const Step = () => {
 
   // 모든 단계 완료 처리
   const handleComplete = () => {
+    // 인증 토큰과 플랜번호 확인
     const token = getAuthToken();
     if (!token || !planNo) {
       alert("플랜 정보 또는 인증 정보가 유효하지 않습니다. 다시 시도해주세요.");
@@ -298,11 +299,12 @@ const Step = () => {
       planDescription: step4Data.planDescription,
       minBudget: step4Data.minBudget ? parseInt(step4Data.minBudget, 10) : 0,
       maxBudget: step4Data.maxBudget ? parseInt(step4Data.maxBudget, 10) : 0,
-      transportReservationLink: step4Data.flightLink || "",
-      accommodationLink: step4Data.hotelLink || "",
+      flightLink: step4Data.flightLink || "",
+      hotelLink: step4Data.hotelLink || "",
     };
 
     console.log("Step 4 데이터 전송:", requestData);
+
     axios
       .put(`${API_BASE_URL}/travel-planner/step4`, requestData, {
         headers: {
@@ -313,15 +315,13 @@ const Step = () => {
       .then((response) => {
         console.log("Step 4 응답:", response.data);
         alert("모든 단계가 완료되었습니다! 멋진 여행 계획이 완성되었어요.");
-        // 세션 데이터 정리
         clearSessionStorageData();
-        navigate("/"); //TODO 플랜 목록 조회 완료되면 거기로
+        navigate("/myplan/list");
       })
       .catch((err) => {
         console.error("Step 4 API 호출 실패:", err);
       });
   };
-
   // 세션스토리지 및 상태 초기화
   const clearSessionStorageData = () => {
     Object.keys(sessionStorage).forEach((key) => {

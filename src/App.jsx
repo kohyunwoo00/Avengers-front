@@ -35,7 +35,7 @@ function App() {
     <AuthProvider>
       <div className="min-h-screen bg-gray-50">
         <Header />
-        <main className="max-w-[1440px] mx-auto px-6 py-8 pb-[145px]">
+        <main className="max-w-[1440px] mx-auto px-6 pt-[140px] pb-[145px]">
           <Routes>
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route
@@ -88,7 +88,10 @@ function App() {
             {/* 나의 여행 플랜 */}
             <Route path="/myplan" element={<StepIndicator />} />
             <Route path="/myplan/list" element={<MyTravelPlanList />} />
-            <Route path="/myplan/detail" element={<MyTravelPlanDetail />} />
+            <Route
+              path="/myplan/detail/:planNo"
+              element={<MyTravelPlanDetail />}
+            />
           </Routes>
         </main>
         <Footer />
