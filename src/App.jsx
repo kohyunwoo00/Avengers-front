@@ -13,6 +13,7 @@ import TravelOptionsManagement from "./pages/Travel/admin/TravelOptionManagement
 import TravelAdminManagement from "./pages/Travel/admin/TravelAdminManagement";
 import TravelRegister from "./pages/Travel/admin/TravelRegister";
 import TravelPage from "./pages/Travel/TravelPage";
+import ThemaTravelPage from "./pages/Travel/ThemaTravelPage";
 import TravelDetailPage from "./pages/Travel/TravelDetail";
 import TravelDetailSearchPage from "./pages/Travel/TravelDetailSearch";
 import MyTravelPlanDetail from "./pages/MyPlan/MyTravelPlanDetail";
@@ -69,6 +70,7 @@ function App() {
 
             {/* 사용자 여행지 */}
             <Route path="/travels" element={<TravelPage />} />
+            <Route path="/thema/travels" element={<ThemaTravelPage />} />
             <Route
               path="/travels/search"
               element={<TravelDetailSearchPage />}

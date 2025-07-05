@@ -33,12 +33,12 @@ function DestinationGrid({ destinations }) {
                 className="w-full h-48 object-cover"
               />
               <div className="absolute top-3 left-3">
-                <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">
+                <span className="bg-blue-400 text-white text-xs px-2 py-1 rounded">
                   {category}
                 </span>
               </div>
               <div className="absolute top-3 right-3 flex gap-1">
-                <span className="inline-block bg-blue-50 text-blue-600 border border-blue-200 text-sm px-3 py-1 rounded-full font-medium">
+                <span className="inline-block bg-blue-50 text-blue-400 border border-blue-200 text-sm px-3 py-1 rounded-full font-medium">
                   조회수 : {dest.viewCount}
                 </span>
               </div>
@@ -57,7 +57,7 @@ function DestinationGrid({ destinations }) {
               <FacilityList facilities={facilities} />
               <button
                 onClick={() => navigate(`/travels/detail/${id}`)}
-                className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+                className="w-full bg-gradient-to-r from-[#73b3df] via-[#61a0d4] to-[#76d9e4] text-white py-2 rounded-md hover:opacity-90 active:scale-95 transition-all text-sm font-medium"
               >
                 상세보기
               </button>

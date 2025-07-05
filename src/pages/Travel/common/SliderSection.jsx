@@ -72,7 +72,7 @@ function SliderSection({ items = [], title }) {
                         onClick={() =>
                           navigate(`/travels/detail/${item.travelNo}`)
                         }
-                        className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                        className="w-full bg-gradient-to-r from-[#73b3df] via-[#61a0d4] to-[#76d9e4] text-white py-2 rounded-md hover:opacity-90 active:scale-95 transition-all text-sm font-medium"
                       >
                         자세히 보기
                       </button>
