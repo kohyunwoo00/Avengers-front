@@ -40,7 +40,7 @@ const MyPage = () => {
     {
       src: "/즐겨찾기조회.png",
       text: "즐겨 찾기 조회",
-      path: "/mypage/favorites",
+      path: "/myPage/BookMarkList",
     },
     {
       src: "/회원탈퇴.png",

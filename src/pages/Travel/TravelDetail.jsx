@@ -15,9 +15,12 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import GoogleMap from "./common/GoogleMap";
+import BookMark from "./common/BookMark";
+import { AuthContext } from "../../components/Context/AuthContext";
 
 function TravelDetailPage() {
   const { id } = useParams();
+
   const [travelDetail, setTravelDetail] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const apiUrl = window.ENV?.API_URL || "http://localhost:8000";
@@ -143,6 +146,7 @@ function TravelDetailPage() {
                     <span className="inline-block bg-blue-50 text-blue-600 border border-blue-200 text-sm px-3 py-1 rounded-full font-medium">
                       조회수 : {travelDetail.viewCount}
                     </span>
+                    <BookMark travelNo={id} isBookmarked={true} />
                   </div>
                 </div>
 

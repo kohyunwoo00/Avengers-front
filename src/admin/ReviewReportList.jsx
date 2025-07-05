@@ -1,33 +1,42 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../components/Context/AuthContext";
+import Pagination from "../components/common/Page/Pagination";
+
 const ReviewReportList = () => {
   const [reportList, setReportList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 5; // 페이지당 항목 수
   const apiUrl = window.ENV?.API_URL || "http://localhost:8000";
   const { auth } = useContext(AuthContext);
 
   useEffect(() => {
-    if (!auth) {
-      return;
-    }
+    if (!auth) return;
 
     axios
       .get(`${apiUrl}/api/admin/reportList`, {
         params: {
-          page: 1,
+          page: currentPage,
         },
-        header: {
+        headers: {
           Authorization: `Bearer ${auth.tokens.accessToken}`,
         },
       })
       .then((response) => {
-        setReportList(response.data.data);
-        console.log(response.data.data);
+        const data = response.data.data;
+        setReportList(data.list || []);
+
+        // ✅ totalCount 기반으로 페이지 수 계산
+        const calculatedTotalPages = Math.ceil(
+          (data.totalCount || 0) / pageSize
+        );
+        setTotalPages(calculatedTotalPages);
       })
       .catch((error) => {
-        console.error(error);
+        console.error("신고 리스트 가져오기 실패:", error);
       });
-  }, [auth]);
+  }, [auth, currentPage]);
 
   return (
     <div className="px-10 py-6">
@@ -50,12 +59,14 @@ const ReviewReportList = () => {
               key={item.reportNo}
               className="border-t hover:bg-gray-50 transition-colors"
             >
-              <td className="py-3">{index + 1}</td>
+              <td className="py-3">
+                {(currentPage - 1) * pageSize + index + 1}
+              </td>
               <td className="py-3 w-64 truncate" style={{ maxWidth: "350px" }}>
                 {item.reviewContent}
               </td>
               <td className="py-3">{item.memberName}</td>
-              <td className="py-3">{item.reportReason}</td>
+              <td className="py-3">{item.reportReason || "-"}</td>
               <td className="py-3">{item.createDate}</td>
               <td
                 className={`py-3 font-semibold ${
@@ -72,6 +83,13 @@ const ReviewReportList = () => {
           ))}
         </tbody>
       </table>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+        className="mt-6"
+      />
     </div>
   );
 };

@@ -71,11 +71,6 @@ const AdminPage = () => {
           text: "리뷰 신고 조회",
           path: "/adminPage/reviewReportList",
         },
-        {
-          src: "/여행지정보신고조회.png",
-          text: "여행지 정보 신고 조회",
-          path: "/adminPage/travelReportList",
-        },
       ],
     },
   ];
