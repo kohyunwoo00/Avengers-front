@@ -7,7 +7,6 @@ import { AuthContext } from "../../../components/Context/AuthContext";
 
 function DestinationGrid({ destinations }) {
   const navigate = useNavigate();
-  alert('커커커커커커커몬');
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
