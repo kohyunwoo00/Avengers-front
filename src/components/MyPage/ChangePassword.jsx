@@ -6,7 +6,7 @@ import StepButton from "../common/MyPlan/StepButton";
 import axios from "axios";
 
 const ChangePassword = () => {
-  const { auth } = useContext(AuthContext);
+  const { auth, logout } = useContext(AuthContext);
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
@@ -46,6 +46,7 @@ const ChangePassword = () => {
         if (response.status === 200) {
           setNewPw(newPw);
           alert("비밀번호가 성공적으로 변경되었습니다.");
+          logout();
           navigate("/login");
         }
       })

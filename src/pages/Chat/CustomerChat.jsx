@@ -34,13 +34,13 @@ const CustomerChat = () => {
 
     // 프로덕션 환경 - wegojapan.shop (HTTPS이므로 WSS 사용)
     if (hostname === "wegojapan.shop") {
-      return "wss://wegojapan.shop/ws";
+      return "https://wegojapan.shop/ws";
     }
 
     // 기타 환경
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const host = window.location.host;
-    return `${protocol}//${host}/ws`;
+    return `${protocol}://${host}/ws`;
   };
 
   const scrollToBottom = () => {

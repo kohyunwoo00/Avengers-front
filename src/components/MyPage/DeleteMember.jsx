@@ -6,7 +6,7 @@ import axios from "axios";
 
 const DeleteMember = () => {
   const [password, setPassword] = useState("");
-  const { auth } = useContext(AuthContext);
+  const { auth, logout } = useContext(AuthContext);
   const memberNo = auth?.loginInfo?.memberNo;
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -31,6 +31,7 @@ const DeleteMember = () => {
         if (response.status === 200) {
           setPassword("");
           alert("회원 탈퇴가 완료되었습니다.");
+          logout();
           navigate("/login");
         }
       })

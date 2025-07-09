@@ -315,7 +315,7 @@ const Step = () => {
         alert("모든 단계가 완료되었습니다! 멋진 여행 계획이 완성되었어요.");
         // 세션 데이터 정리
         clearSessionStorageData();
-        navigate("/"); //TODO 플랜 목록 조회 완료되면 거기로
+        navigate("/myplan/list");
       })
       .catch((err) => {
         console.error("Step 4 API 호출 실패:", err);

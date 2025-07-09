@@ -62,11 +62,10 @@ const ReviewReportList = () => {
         },
       })
       .then((response) => {
-        console.log("✅ 리뷰 데이터:", response.data);
         setSelectedReview(response.data.data);
       })
       .catch((error) => {
-        console.error("❌ 리뷰 불러오기 실패:", error);
+        console.log(error);
         alert("리뷰를 불러오는 데 실패했습니다.");
       });
   };
