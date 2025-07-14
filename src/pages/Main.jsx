@@ -51,7 +51,7 @@ const Main = () => {
         <div className="absolute inset-0 bg-white/60 backdrop-blur-sm" />
         <div className="relative z-10 max-w-6xl mx-auto h-full flex flex-col justify-center items-center text-center px-4">
           <h1 className="text-4xl sm:text-5xl font-extrabold text-blue-800 mb-4 drop-shadow-md">
-            일본 여행, 지금 시작해보세요
+            일본 오사카 여행, 지금 시작해보세요
           </h1>
           <p className="text-lg sm:text-xl text-gray-700 mb-6 max-w-xl">
             도쿄, 오사카, 교토부터 숨겨진 여행지까지
