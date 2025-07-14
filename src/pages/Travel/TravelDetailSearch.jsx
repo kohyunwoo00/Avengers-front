@@ -212,7 +212,10 @@ export default function TravelDetailSearchPage() {
             type="text"
             placeholder="여행지명, 위치로 검색하세요..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
             className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg"
           />
         </div>
@@ -393,8 +396,11 @@ export default function TravelDetailSearchPage() {
             여행지 리스트
           </h2>
           <p className="text-gray-600">
-            총 <span className="font-semibold text-blue-600"></span> 개의
-            여행지를 찾았습니다
+            총{" "}
+            <span className="font-semibold text-blue-600">
+              {travelList.length}
+            </span>{" "}
+            개의 여행지를 찾았습니다
           </p>
         </div>
 
